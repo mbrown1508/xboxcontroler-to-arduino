@@ -12,7 +12,7 @@ class dataPacket:
         self.leftX, self.leftY = 0, 0
 
     def __str__(self):
-        print(self.leftX, self.leftY)
+        return "{0:.2f} {0:.2f}".format(self.leftX, self.leftY)
 
 data_packet = dataPacket()
 
@@ -25,7 +25,7 @@ try:
 
             # Show connection status
             if joy.connected():
-                
+
                 # Left analog stick
                 data_packet.leftX = joy.leftX()
                 data_packet.leftY = joy.leftY()
