@@ -62,7 +62,7 @@ try:
                 data_packet.set_rightY(joy.rightY())
 
                 # Left analog stick
-                data_packet.set_left_analogue(joy.leftX(), joy.leftY())
+                data_packet.set_left_analogue(joy.leftX(deadzone=0), joy.leftY(deadzone=0))
 
                 # Triggers
                 data_packet.set_right_trigger(joy.rightTrigger())
