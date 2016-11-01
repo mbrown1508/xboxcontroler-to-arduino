@@ -11,8 +11,14 @@ class dataPacket:
     def __init__(self):
         self.leftX, self.leftY = 0, 0
 
+    def set_leftX(self, leftX):
+        self.leftX = round(leftX * 255, 0)
+
+    def set_leftY(self, leftY):
+        self.leftY = round(leftY * 255, 0)
+
     def __str__(self):
-        return "{0:.2f} {0:.2f}".format(self.leftX, self.leftY)
+        return "{} {}".format(self.leftX, self.leftY)
 
 data_packet = dataPacket()
 
@@ -27,8 +33,8 @@ try:
             if joy.connected():
 
                 # Left analog stick
-                data_packet.leftX = joy.leftX()
-                data_packet.leftY = joy.leftY()
+                data_packet.set_leftX(joy.leftX())
+                data_packet.set_leftY(joy.leftY())
 
                 print(data_packet)
 
