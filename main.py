@@ -10,15 +10,19 @@ last_run = time.time()
 class dataPacket:
     def __init__(self):
         self.leftX, self.leftY = 0, 0
+        self.leftXPos, self.leftYPos = 0, 0
 
     def set_leftX(self, leftX):
-        self.leftX = round(leftX * 255, 0)
+        self.leftXPos = 1 if leftX > 0 else 0
+        self.leftX = abs(int(leftX * 255))
+
 
     def set_leftY(self, leftY):
-        self.leftY = round(leftY * 255, 0)
+        self.leftYPos = 1 if leftY > 0 else 0
+        self.leftY = abs(round(leftY * 255))
 
     def __str__(self):
-        return "{} {}".format(self.leftX, self.leftY)
+        return "{} {} {} {}".format(self.leftX, self.leftY, self.leftXPos, self.leftYPos)
 
 data_packet = dataPacket()
 
