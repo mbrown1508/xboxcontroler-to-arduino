@@ -9,17 +9,39 @@ joy = xbox.Joystick(REFRESH_TIME+10)     # Just to make sure that the Joystick i
 refresh_seconds = 1 / REFRESH_TIME
 last_run = time.time()
 
+import ctypes
+c_uint8 = ctypes.c_uint8
+
+class Flags_bits( ctypes.LittleEndianStructure ):
+    _fields_ = [
+                ("rightXPos",     c_uint8, 1 ),  # asByte & 1
+                ("rightYPos", c_uint8, 1 ),  # asByte & 2
+                ("left_direction_pos",    c_uint8, 1 ),  # asByte & 4
+                ("x_button",       c_uint8, 1 ),  # asByte & 8
+                ("y_button",       c_uint8, 1 ),  # asByte & 8
+                ("a_button",       c_uint8, 1 ),  # asByte & 8
+                ("b_button",       c_uint8, 1 ),  # asByte & 8
+                ("not_implemented",       c_uint8, 1 ),  # asByte & 8
+                ]
+
+class Flags( ctypes.Union ):
+    _anonymous_ = ("bit",)
+    _fields_ = [
+                ("bit",    Flags_bits ),
+                ("asByte", c_uint8    )
+                ]
+
 class dataPacket:
     def __init__(self):
-        self.rightX, self.rightY = 0, 0
-        self.rightXPos, self.rightYPos = 0, 0
+        self.flags = Flags()
+        self.flags.asByte = 0x00
 
     def set_rightX(self, rightX):
-        self.rightXPos = 1 if rightX > 0 else 0
+        self.flags.rightXPos = 1 if rightX > 0 else 0
         self.rightX = abs(int(rightX * 255))
 
     def set_rightY(self, rightY):
-        self.rightYPos = 1 if rightY > 0 else 0
+        self.flags.rightYPos = 1 if rightY > 0 else 0
         self.rightY = abs(int(rightY * 255))
 
     def set_right_trigger(self, right_trigger):
@@ -30,7 +52,7 @@ class dataPacket:
 
     def set_left_analogue(self, X, Y):
         if X == 0:
-            self.left_direction, self.left_magnitude, self.left_direction_pos = 0, 0, 0
+            self.left_direction, self.left_magnitude, self.flags.left_direction_pos = 0, 0, 0
         else:
             self.left_magnitude = sqrt(X*X + Y*Y) * 255
             if self.left_magnitude > 25:
@@ -46,43 +68,46 @@ class dataPacket:
                     self.left_direction *= -1
                     if self.left_direction > 0:
                         self.left_direction = abs(int(90 + 90 - self.left_direction))
-                        self.left_direction_pos = 1
+                        self.flags.left_direction_pos = 1
                     else:
                         self.left_direction = abs(int(-90 - 90 - self.left_direction))
-                        self.left_direction_pos = 0
+                        self.flags.left_direction_pos = 0
                 else:
                     if self.left_direction > 0:
                         self.left_direction = abs(int(self.left_direction))
-                        self.left_direction_pos = 1
+                        self.flags.left_direction_pos = 1
                     else:
                         self.left_direction = abs(int(self.left_direction))
-                        self.left_direction_pos = 0
+                        self.flags.left_direction_pos = 0
 
             else:
-                self.left_direction, self.left_magnitude, self.left_direction_pos = 0, 0, 0
+                self.left_direction, self.left_magnitude, self.flags.left_direction_pos = 0, 0, 0
 
     def set_right_buttons(self, A, B, X, Y):
-        self.x_button = X
-        self.y_botton = Y
-        self.a_button = A
-        self.b_button = B
+        self.flags.x_button = X
+        self.flags.y_botton = Y
+        self.flags.a_button = A
+        self.flags.b_button = B
 
     def __str__(self):
-        return "{} {} {} {} {} {} {} {} {} {} {} {} {}".format(   self.rightX,
-                                                                  self.rightXPos,
+        return "{} {} {} {} {} {} {} {} {} {} {} {} {} {}".format(   self.rightX,
+                                                                  self.flags.rightXPos,
                                                                   self.rightY,
-                                                                  self.rightYPos,
+                                                                  self.flags.rightYPos,
                                                                   self.right_trigger,
                                                                   self.left_trigger,
                                                                   self.left_magnitude,
                                                                   self.left_direction,
-                                                                  self.left_direction_pos,
-                                                                  self.x_button,
-                                                                  self.y_botton,
-                                                                  self.a_button,
-                                                                  self.b_button)
+                                                                  self.flags.left_direction_pos,
+                                                                  self.flags.x_button,
+                                                                  self.flags.y_botton,
+                                                                  self.flags.a_button,
+                                                                  self.flags.b_button,
+                                                                  self.flags.asByte)
+
 
 data_packet = dataPacket()
+
 
 # Loop forever
 try:
