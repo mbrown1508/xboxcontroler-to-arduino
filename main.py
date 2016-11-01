@@ -36,14 +36,14 @@ class dataPacket:
             self.left_magnitude = sqrt(X*X + Y*Y)
 
     def __str__(self):
-        return "{} {} {} {} {} {} {} {} {}".format(  self.rightX,
+        return "{} {} {} {} {} {} {} {}".format(  self.rightX,
                                                   self.rightXPos,
                                                   self.rightY,
                                                   self.rightYPos,
                                                   self.right_trigger,
                                                   self.left_trigger,
                                                   self.left_direction,
-                                                  self.left_direction)
+                                                  self.left_magnitude)
 
 data_packet = dataPacket()
 
