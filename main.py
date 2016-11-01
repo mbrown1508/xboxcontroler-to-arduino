@@ -111,7 +111,7 @@ class dataPacket:
                                                                   self.left_direction,
                                                                   self.flags.left_direction_pos,
                                                                   self.flags.x_button,
-                                                                  self.flags.y_botton,
+                                                                  self.flags.y_button,
                                                                   self.flags.a_button,
                                                                   self.flags.b_button,
                                                                   self.return_byte_array())
