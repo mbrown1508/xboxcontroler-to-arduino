@@ -50,6 +50,13 @@ class dataPacket:
                     else:
                         self.left_direction = abs(int(-90 - 90 + self.left_direction))
                         self.left_direction_pos = 0
+                else:
+                    if self.left_direction > 0:
+                        self.left_direction = abs(int(self.left_direction))
+                        self.left_direction_pos = 1
+                    else:
+                        self.left_direction = abs(int(self.left_direction))
+                        self.left_direction_pos = 0
 
             else:
                 self.left_direction, self.left_magnitude, self.left_direction_pos = 0, 0, 0
