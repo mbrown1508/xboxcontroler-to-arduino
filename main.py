@@ -114,7 +114,7 @@ class dataPacket:
                                                                   self.flags.y_button,
                                                                   self.flags.a_button,
                                                                   self.flags.b_button,
-                                                                  self.return_byte_array())
+                                                                  str(self.return_byte_array()))
 
 
 data_packet = dataPacket()
