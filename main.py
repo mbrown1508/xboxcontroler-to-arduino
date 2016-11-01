@@ -18,10 +18,10 @@ class Flags_bits( ctypes.LittleEndianStructure ):
                 ("rightYPos", c_uint8, 1 ),  # asByte & 2
                 ("left_direction_pos",    c_uint8, 1 ),  # asByte & 4
                 ("x_button",       c_uint8, 1 ),  # asByte & 8
-                ("y_button",       c_uint8, 1 ),  # asByte & 8
-                ("a_button",       c_uint8, 1 ),  # asByte & 8
-                ("b_button",       c_uint8, 1 ),  # asByte & 8
-                ("not_implemented",       c_uint8, 1 ),  # asByte & 8
+                ("y_button",       c_uint8, 1 ),  # asByte & 16
+                ("a_button",       c_uint8, 1 ),  # asByte & 32
+                ("b_button",       c_uint8, 1 ),  # asByte & 64
+                ("not_implemented",       c_uint8, 1 ),  # asByte & 128
                 ]
 
 class Flags( ctypes.Union ):
@@ -85,12 +85,23 @@ class dataPacket:
 
     def set_right_buttons(self, A, B, X, Y):
         self.flags.x_button = X
-        self.flags.y_botton = Y
+        self.flags.y_button = Y
         self.flags.a_button = A
         self.flags.b_button = B
 
+    def return_byte_array(self):
+        return bytearray([
+            self.rightX,
+            self.rightY,
+            self.right_trigger,
+            self.left_trigger,
+            self.left_magnitude,
+            self.left_direction,
+            self.flags.asByte
+        ])
+
     def __str__(self):
-        return "{} {} {} {} {} {} {} {} {} {} {} {} {} {}".format(   self.rightX,
+        return "{} {} {} {} {} {} {} {} {} {} {} {} {}\n{}".format(self.rightX,
                                                                   self.flags.rightXPos,
                                                                   self.rightY,
                                                                   self.flags.rightYPos,
@@ -103,7 +114,7 @@ class dataPacket:
                                                                   self.flags.y_botton,
                                                                   self.flags.a_button,
                                                                   self.flags.b_button,
-                                                                  self.flags.asByte)
+                                                                  self.return_byte_array())
 
 
 data_packet = dataPacket()
