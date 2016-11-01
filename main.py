@@ -30,10 +30,30 @@ class dataPacket:
 
     def set_left_analogue(self, X, Y):
         if X == 0:
-            self.left_direction, self.left_magnitude = 0, 0
+            self.left_direction, self.left_magnitude, self.left_direction_pos = 0, 0, 0
         else:
-            self.left_direction = degrees(atan(Y/X))
-            self.left_magnitude = sqrt(X*X + Y*Y)
+            self.left_magnitude = sqrt(X*X + Y*Y) * 255
+            if self.left_magnitude > 0.1:
+                self.left_direction = degrees(atan(Y/X))
+
+                # Clean up magnitude
+                if self.left_magnitude > 255:
+                    self.left_magnitude = 255
+                int(self.left_magnitude)
+
+                # Clean up direction
+                if X < 0:
+                    self.left_direction *= -1
+                    if self.left_direction > 0:
+                        self.left_direction = abs(int(90 + 90 - self.left_direction))
+                        self.left_direction_pos = 1
+                    else:
+                        self.left_direction = abs(int(-90 - 90 + self.left_direction))
+                        self.left_direction_pos = 0
+
+            else:
+                self.left_direction, self.left_magnitude, self.left_direction_pos = 0, 0, 0
+
 
     def __str__(self):
         return "{} {} {} {} {} {} {} {}".format(  self.rightX,
@@ -42,8 +62,9 @@ class dataPacket:
                                                   self.rightYPos,
                                                   self.right_trigger,
                                                   self.left_trigger,
+                                                  self.left_magnitude,
                                                   self.left_direction,
-                                                  self.left_magnitude)
+                                                  self.left_direction_pos)
 
 data_packet = dataPacket()
 
