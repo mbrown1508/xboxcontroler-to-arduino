@@ -39,7 +39,7 @@ class dataPacket:
                 # Clean up magnitude
                 if self.left_magnitude > 255:
                     self.left_magnitude = 255
-                int(self.left_magnitude)
+                self.left_magnitude = int(self.left_magnitude)
 
                 # Clean up direction
                 if X < 0:
@@ -61,17 +61,26 @@ class dataPacket:
             else:
                 self.left_direction, self.left_magnitude, self.left_direction_pos = 0, 0, 0
 
+    def set_right_buttons(self, A, B, X, Y):
+        self.x_button = X
+        self.y_botton = Y
+        self.a_button = A
+        self.b_button = B
 
     def __str__(self):
-        return "{} {} {} {} {} {} {} {} {}".format(  self.rightX,
-                                                  self.rightXPos,
-                                                  self.rightY,
-                                                  self.rightYPos,
-                                                  self.right_trigger,
-                                                  self.left_trigger,
-                                                  self.left_magnitude,
-                                                  self.left_direction,
-                                                  self.left_direction_pos)
+        return "{} {} {} {} {} {} {} {} {} {} {} {} {}".format(   self.rightX,
+                                                                  self.rightXPos,
+                                                                  self.rightY,
+                                                                  self.rightYPos,
+                                                                  self.right_trigger,
+                                                                  self.left_trigger,
+                                                                  self.left_magnitude,
+                                                                  self.left_direction,
+                                                                  self.left_direction_pos,
+                                                                  self.x_button,
+                                                                  self.y_botton,
+                                                                  self.a_button,
+                                                                  self.b_button)
 
 data_packet = dataPacket()
 
@@ -96,28 +105,11 @@ try:
                 data_packet.set_right_trigger(joy.rightTrigger())
                 data_packet.set_left_trigger(joy.leftTrigger())
 
+                # Set Right buttons
+                data_packet.set_right_buttons(joy.A(), joy.B(), joy.X(), joy.Y())
+
                 print(data_packet)
 
-                # # Right trigger
-                # print "Rtrg ",fmtFloat(),
-                # # A/B/X/Y buttons
-                # print "Buttons ",
-                # if joy.A():
-                #     print "A",
-                # else:
-                #     print " ",
-                # if joy.B():
-                #     print "B",
-                # else:
-                #     print " ",
-                # if joy.X():
-                #     print "X",
-                # else:
-                #     print " ",
-                # if joy.Y():
-                #     print "Y",
-                # else:
-                #     print " ",
                 # # Dpad U/D/L/R
                 # print "Dpad ",
                 # if joy.dpadUp():
