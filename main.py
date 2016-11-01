@@ -1,5 +1,6 @@
 import xbox
 import time
+import serial
 
 from math import atan, sqrt, degrees
 
@@ -8,6 +9,8 @@ REFRESH_TIME = 1
 joy = xbox.Joystick(REFRESH_TIME+10)     # Just to make sure that the Joystick is always updated when it loops.
 refresh_seconds = 1 / REFRESH_TIME
 last_run = time.time()
+
+ser = serial.Serial('/dev/ttyACM0', 9600)
 
 import ctypes
 c_uint8 = ctypes.c_uint8
@@ -101,7 +104,7 @@ class dataPacket:
         ])
 
     def __str__(self):
-        return "{} {} {} {} {} {} {} {} {} {} {} {} {}\n{}".format(self.rightX,
+        return "{} {} {} {} {} {} {} {} {} {} {} {} {}".format(self.rightX,
                                                                   self.flags.rightXPos,
                                                                   self.rightY,
                                                                   self.flags.rightYPos,
@@ -113,8 +116,7 @@ class dataPacket:
                                                                   self.flags.x_button,
                                                                   self.flags.y_button,
                                                                   self.flags.a_button,
-                                                                  self.flags.b_button,
-                                                                  str(self.return_byte_array()))
+                                                                  self.flags.b_button)
 
 
 data_packet = dataPacket()
@@ -146,24 +148,12 @@ try:
 
                 print(data_packet)
 
-                # # Dpad U/D/L/R
-                # print "Dpad ",
-                # if joy.dpadUp():
-                #     print "U",
-                # else:
-                #     print " ",
-                # if joy.dpadDown():
-                #     print "D",
-                # else:
-                #     print " ",
-                # if joy.dpadLeft():
-                #     print "L",
-                # else:
-                #     print " ",
-                # if joy.dpadRight():
-                #     print "R",
-                # else:
-                #     print " ",
+                # Write data to serial port
+                ser.write(data_packet.return_byte_array())
+
+                # Wait for a response
+                #TODO
+
             else:
                 print("Disconnected")
 
