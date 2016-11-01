@@ -9,20 +9,30 @@ last_run = time.time()
 
 class dataPacket:
     def __init__(self):
-        self.leftX, self.leftY = 0, 0
-        self.leftXPos, self.leftYPos = 0, 0
+        self.rightX, self.rightY = 0, 0
+        self.rightXPos, self.rightYPos = 0, 0
 
-    def set_leftX(self, leftX):
-        self.leftXPos = 1 if leftX > 0 else 0
-        self.leftX = abs(int(leftX * 255))
+    def set_rightX(self, rightX):
+        self.rightXPos = 1 if rightX > 0 else 0
+        self.rightX = abs(int(rightX * 255))
 
+    def set_rightY(self, rightY):
+        self.rightYPos = 1 if rightY > 0 else 0
+        self.rightY = abs(int(rightY * 255))
 
-    def set_leftY(self, leftY):
-        self.leftYPos = 1 if leftY > 0 else 0
-        self.leftY = abs(round(leftY * 255))
+    def set_right_trigger(self, right_trigger):
+        self.right_trigger = abs(int(right_trigger * 255))
+
+    def set_left_trigger(self, left_trigger):
+        self.left_trigger = abs(int(left_trigger * 255))
 
     def __str__(self):
-        return "{} {} {} {}".format(self.leftX, self.leftY, self.leftXPos, self.leftYPos)
+        return "{} {} {} {} {} {}".format(self.rightX,
+                                          self.rightY,
+                                          self.right_trigger,
+                                          self.left_trigger,
+                                          self.rightXPos,
+                                          self.rightYPos)
 
 data_packet = dataPacket()
 
@@ -37,13 +47,15 @@ try:
             if joy.connected():
 
                 # Left analog stick
-                data_packet.set_leftX(joy.leftX())
-                data_packet.set_leftY(joy.leftY())
+                data_packet.set_rightX(joy.rightX())
+                data_packet.set_rightY(joy.rightY())
+                data_packet.set_right_trigger(joy.rightTrigger())
+                data_packet.set_left_trigger(joy.rightTrigger())
 
                 print(data_packet)
 
                 # # Right trigger
-                # print "Rtrg ",fmtFloat(joy.rightTrigger()),
+                # print "Rtrg ",fmtFloat(),
                 # # A/B/X/Y buttons
                 # print "Buttons ",
                 # if joy.A():
