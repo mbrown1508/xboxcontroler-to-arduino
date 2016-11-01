@@ -29,8 +29,11 @@ class dataPacket:
         self.left_trigger = abs(int(left_trigger * 255))
 
     def set_left_analogue(self, X, Y):
-        self.left_direction = atan(Y/X)
-        self.left_magnitude = sqrt(X*X + Y*Y)
+        if X == 0:
+            self.left_direction, self.left_magnitude = 0, 0
+        else:
+            self.left_direction = atan(Y/X)
+            self.left_magnitude = sqrt(X*X + Y*Y)
 
     def __str__(self):
         return "{} {} {} {} {} {} {} {} {}".format(  self.rightX,
