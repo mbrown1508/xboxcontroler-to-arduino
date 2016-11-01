@@ -1,7 +1,7 @@
 import xbox
 import time
 
-from math import atan, sqrt
+from math import atan, sqrt, degrees
 
 REFRESH_TIME = 1
     
@@ -32,7 +32,7 @@ class dataPacket:
         if X == 0:
             self.left_direction, self.left_magnitude = 0, 0
         else:
-            self.left_direction = atan(Y/X)
+            self.left_direction = degrees(atan(Y/X))
             self.left_magnitude = sqrt(X*X + Y*Y)
 
     def __str__(self):
