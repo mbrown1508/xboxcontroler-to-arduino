@@ -33,7 +33,7 @@ class dataPacket:
             self.left_direction, self.left_magnitude, self.left_direction_pos = 0, 0, 0
         else:
             self.left_magnitude = sqrt(X*X + Y*Y) * 255
-            if self.left_magnitude > 0.1:
+            if self.left_magnitude > 25:
                 self.left_direction = degrees(atan(Y/X))
 
                 # Clean up magnitude
@@ -48,7 +48,7 @@ class dataPacket:
                         self.left_direction = abs(int(90 + 90 - self.left_direction))
                         self.left_direction_pos = 1
                     else:
-                        self.left_direction = abs(int(-90 - 90 + self.left_direction))
+                        self.left_direction = abs(int(-90 - 90 - self.left_direction))
                         self.left_direction_pos = 0
                 else:
                     if self.left_direction > 0:
@@ -63,7 +63,7 @@ class dataPacket:
 
 
     def __str__(self):
-        return "{} {} {} {} {} {} {} {}".format(  self.rightX,
+        return "{} {} {} {} {} {} {} {} {}".format(  self.rightX,
                                                   self.rightXPos,
                                                   self.rightY,
                                                   self.rightYPos,
