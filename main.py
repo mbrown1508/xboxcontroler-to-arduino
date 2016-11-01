@@ -1,6 +1,8 @@
 import xbox
 import time
 
+from math import atan, sqrt
+
 REFRESH_TIME = 1
     
 joy = xbox.Joystick(REFRESH_TIME+10)     # Just to make sure that the Joystick is always updated when it loops.
@@ -26,13 +28,19 @@ class dataPacket:
     def set_left_trigger(self, left_trigger):
         self.left_trigger = abs(int(left_trigger * 255))
 
+    def set_left_analogue(self, X, Y):
+        self.left_direction = atan(Y/X)
+        self.left_magnitude = sqrt(X*X + Y*Y)
+
     def __str__(self):
-        return "{} {} {} {} {} {}".format(self.rightX,
-                                          self.rightY,
-                                          self.right_trigger,
-                                          self.left_trigger,
-                                          self.rightXPos,
-                                          self.rightYPos)
+        return "{} {} {} {} {} {} {} {} {}".format(  self.rightX,
+                                                  self.rightXPos,
+                                                  self.rightY,
+                                                  self.rightYPos,
+                                                  self.right_trigger,
+                                                  self.left_trigger,
+                                                  self.left_direction,
+                                                  self.left_direction)
 
 data_packet = dataPacket()
 
@@ -46,11 +54,16 @@ try:
             # Show connection status
             if joy.connected():
 
-                # Left analog stick
+                # Right analog stick
                 data_packet.set_rightX(joy.rightX())
                 data_packet.set_rightY(joy.rightY())
+
+                # Left analog stick
+                data_packet.set_left_analogue(joy.leftX(), joy.leftY())
+
+                # Triggers
                 data_packet.set_right_trigger(joy.rightTrigger())
-                data_packet.set_left_trigger(joy.rightTrigger())
+                data_packet.set_left_trigger(joy.leftTrigger())
 
                 print(data_packet)
 
